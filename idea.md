@@ -1,4 +1,4 @@
-## **Project Idea Submission Template**
+## **Project Idea Submission**
 
 **1. Project Title**
 *A personalized AI healthcare assistant that uses machine learning to analyze user-submitted health data and provide proactive, preventative health recommendations.*
