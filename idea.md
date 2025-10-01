@@ -51,9 +51,9 @@
 **9. Timeline (Optional)**
 
 * Week 1–2: Research & UI design
-* Week 3–4: Backend setup & database integration
-* Week 5–6: AI/ML model integration
-* Week 7: Testing & deployment
+* Week 3–4: Front-end phase 1: Basic structure
+* Week 5–6: Backend setup & database integration 
+* Week 7-10: AI/ML model integration 
 
 ---
 
