@@ -1,0 +1,10 @@
+./Backend/.env
+./Backend/notes.txt
+Backend/.env
+Backend/notes.txt
+Backend/node_modules
+Backend/package-lock.json
+
+HealthCare/.expo
+HealthCare/node_modules
+node_modules
