@@ -19,7 +19,7 @@ export default function ChatbotScreen() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const API_URL ="http://localhost:5000";
+  const API_URL ="https://healthcare-ai-backend-ohsp.onrender.com";
 
   useEffect(() => {
     const fetchHistory = async () => {

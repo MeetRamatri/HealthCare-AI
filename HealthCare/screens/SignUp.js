@@ -18,7 +18,7 @@ export default function SignUp({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const API_URL ="http://localhost:5000";
+  const API_URL ="https://healthcare-ai-backend-ohsp.onrender.com";
 
   const handleSignUp = async () => {
     if (isLoading) return;
