@@ -6,6 +6,7 @@ import cors from "cors";
 import axios from "axios";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai"
+import multer from "multer";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -21,14 +22,14 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   chatHistory: [
     {
-      role: { type: String }, 
+      role: { type: String },
       message: { type: String },
       timestamp: { type: Date, default: Date.now }
     }
   ]
 });
 const User = mongoose.model("User", userSchema);
-const JWT_SECRET = "SUPER_SECRET_KEY"; 
+const JWT_SECRET = "SUPER_SECRET_KEY";
 function authMiddleware(req, res, next) {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "No token provided" });
@@ -113,15 +114,55 @@ app.post("/chat", authMiddleware, async (req, res) => {
       role: "ai",
       message: aiReply
     });
-    await user.save(); 
+    await user.save();
     res.json({
       reply: aiReply
     });
   } catch (error) {
-    console.log(error.response?.data || error);
+    console.log(error);
     res.status(500).json({ error: "Gemini API error" });
   }
 });
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post("/analyze-scan", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    const base64Image = req.file.buffer.toString("base64");
+    const mimeType = req.file.mimetype;
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: "Analyze this medical report or scan and provide a detailed summary and any key findings." },
+            {
+              inlineData: {
+                mimeType: mimeType,
+                data: base64Image,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    const analysis = response?.text ?? "No analysis generated.";
+    res.json({ analysis });
+
+  } catch (error) {
+    console.error("Analysis error:", error);
+    res.status(500).json({ error: "Failed to analyze image" });
+  }
+});
+
 app.listen(5000, () =>
   console.log("Server running on http://localhost:5000")
 );
