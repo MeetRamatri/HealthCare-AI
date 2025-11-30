@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 export default function ScanScreen() {
@@ -51,7 +51,7 @@ export default function ScanScreen() {
           type: 'image/jpeg',
         });
 
-        const response = await fetch('http://localhost:5000/analyze-scan', {
+        const response = await fetch('https://healthcare-ai-backend-ohsp.onrender.com/analyze-scan', {
           method: 'POST',
           body: formData,
           headers: {
@@ -76,7 +76,9 @@ export default function ScanScreen() {
         {analysis ? (
           <View style={styles.resultContainer}>
             <Text style={styles.resultTitle}>Analysis Result:</Text>
-            <Text style={styles.resultText}>{analysis}</Text>
+            <ScrollView style={styles.scrollView}>
+              <Text style={styles.resultText}>{analysis}</Text>
+            </ScrollView>
             <Button title="Scan Again" onPress={() => setAnalysis(null)} />
           </View>
         ) : (
@@ -179,5 +181,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     marginTop: 10,
+  },
+  scrollView: {
+    flex: 1,
+    marginBottom: 20,
   },
 });
