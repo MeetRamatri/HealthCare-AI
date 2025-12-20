@@ -46,6 +46,10 @@ Scan the QR code from the terminal
 The app will load on your device
 ```
 
+**📸 Video Demo**
+[Demo Gdrive link](https://drive.google.com/file/d/1KnDHRBWwz5f0YHl3q0aZ_z0y9WehSnEA/view?usp=sharing)
+![Demo](https://drive.google.com/file/d/1KnDHRBWwz5f0YHl3q0aZ_z0y9WehSnEA/view?usp=sharing)
+
 **📸 Screenshots**
 ### 🔐 Login
 ![Login](HealthCare/assets/ScreenShots/Screenshot_20251130_163359_Expo%20Go.jpg)
