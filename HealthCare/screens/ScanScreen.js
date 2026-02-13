@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import Markdown from 'react-native-markdown-display';
+import markdownStyles from './ChatbotStyles';
+
 export default function ScanScreen() {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
@@ -77,7 +80,9 @@ export default function ScanScreen() {
           <View style={styles.resultContainer}>
             <Text style={styles.resultTitle}>Analysis Result:</Text>
             <ScrollView style={styles.scrollView}>
-              <Text style={styles.resultText}>{analysis}</Text>
+              <Markdown style={markdownStyles}>
+                {analysis}
+              </Markdown>
             </ScrollView>
             <Button title="Scan Again" onPress={() => setAnalysis(null)} />
           </View>

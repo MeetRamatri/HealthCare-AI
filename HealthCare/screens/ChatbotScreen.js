@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Markdown from 'react-native-markdown-display';
+import markdownStyles from './ChatbotStyles';
 import { UserContext } from "../context/UserContext";
 
 export default function ChatbotScreen() {
@@ -19,7 +21,7 @@ export default function ChatbotScreen() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const API_URL ="https://healthcare-ai-backend-ohsp.onrender.com";
+  const API_URL = "https://healthcare-ai-backend-ohsp.onrender.com";
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -53,7 +55,7 @@ export default function ChatbotScreen() {
     fetchHistory();
   }, [user])
 
-const sendMessage = async () => {
+  const sendMessage = async () => {
     if (input.trim().length === 0) return;
 
     setIsLoading(true);
@@ -63,40 +65,40 @@ const sendMessage = async () => {
     setInput("");
 
     try {
-        const token = user?.token;
-        const response = await fetch(`${API_URL}/chat`, {
-          method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-          body: JSON.stringify({ message: messageToSend }),
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      const token = user?.token;
+      const response = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({ message: messageToSend }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-        const data = await response.json();
-        const botMessage = {
-          id: data.id || Date.now().toString() + 'b',
-          text: data.reply || data.replyText || 'No reply',
-          sender: "bot",
-        };
-        
-        setMessages((prev) => [...prev, botMessage]);
+      const data = await response.json();
+      const botMessage = {
+        id: data.id || Date.now().toString() + 'b',
+        text: data.reply || data.replyText || 'No reply',
+        sender: "bot",
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
 
     } catch (error) {
-        console.error("Failed to send message:", error);
-        const errorMessage = { 
-            id: Date.now().toString() + 'e', 
-            text: "Sorry, a connection or authentication error occurred. Please try again.", 
-            sender: "bot" 
-        };
-        setMessages((prev) => [...prev, errorMessage]);
+      console.error("Failed to send message:", error);
+      const errorMessage = {
+        id: Date.now().toString() + 'e',
+        text: "Sorry, a connection or authentication error occurred. Please try again.",
+        sender: "bot"
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-};
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -110,7 +112,11 @@ const sendMessage = async () => {
               item.sender === "user" ? styles.userMessage : styles.botMessage,
             ]}
           >
-            <Text style={{ color: "#fff" }}>{item.text}</Text>
+            <Markdown
+              style={markdownStyles}
+            >
+              {item.text}
+            </Markdown>
           </View>
         )}
       />
@@ -149,3 +155,4 @@ const styles = StyleSheet.create({
   input: { flex: 1, paddingHorizontal: 10 },
   sendButton: { backgroundColor: "#4CAF50", padding: 10, borderRadius: 20 },
 });
+
